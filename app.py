@@ -152,9 +152,7 @@ ooter = """
 }
 </style>
 
-<div class="footer">
-    Developed with 💖 by <b>Navya Gupta</b>
-</div>
-"""
-
-st.markdown(footer, unsafe_allow_html=True
+st.markdown(
+    "<div style='text-align:center; padding:10px;'>Developed with 💖 by <b>Navya Gupta</b></div>",
+    unsafe_allow_html=True
+)
