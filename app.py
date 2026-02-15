@@ -137,7 +137,7 @@ text-decoration: underline;
 if __name__ == '__main__':
 	main()
 
-footer = """
+ooter = """
 <style>
 .footer {
     position: relative;
@@ -157,4 +157,4 @@ footer = """
 </div>
 """
 
-st.markdown(footer, unsafe_allow_html=True)
+st.markdown(footer, unsafe_allow_html=True
