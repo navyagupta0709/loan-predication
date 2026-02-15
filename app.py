@@ -133,3 +133,36 @@ text-decoration: underline;
 }
 
 
+
+if __name__ == '__main__':
+	main()
+
+footer="""<style>
+a:link , a:visited{
+color: white;
+background-color: transparent;
+text-decoration: underline;
+}
+
+a:hover,  a:active {
+color: red;
+background-color: transparent;
+text-decoration: underline;
+}
+
+.footer {
+position: relative;
+left: 0;
+bottom: 0;
+width: 100%;
+background-color: #Oe1117;
+color: white;
+text-align: center;
+}
+</style>
+<div class="footer">
+<p>Developed with ❤ by <a style='display: block; text-align: center;
+</div>
+"""
+st.markdown(footer,unsafe_allow_html=True)
+
