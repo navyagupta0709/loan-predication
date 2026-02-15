@@ -40,31 +40,40 @@ def main():
     property_area = property_dict[property_area]
 
     # ----------- PREDICTION -----------
+if st.button("Submit"):
 
-    if st.button("Submit"):
+    model = load_model()
 
-        model = load_model()
+    # Manual encoding
+    gender_val = 1 if gender == "Male" else 0
+    married_val = 1 if married == "Yes" else 0
+    education_val = 1 if education == "Graduate" else 0
+    employed_val = 1 if employed == "Yes" else 0
+    property_dict = {"Rural": 0, "Semiurban": 1, "Urban": 2}
+    property_val = property_dict[property_area]
 
-        features = np.array([[dependents,
-                              education,
-                              employed,
-                              applicant_income,
-                              coapplicant_income,
-                              loan_amount,
-                              loan_term,
-                              credit_history,
-                              property_area,
-                              gender,
-                              married]])
+    # IMPORTANT: Same order as training
+    features = np.array([[applicant_income,
+                          coapplicant_income,
+                          loan_amount,
+                          loan_term,
+                          gender_val,
+                          married_val,
+                          dependents,
+                          education_val,
+                          employed_val,
+                          credit_history,
+                          property_val]])
 
-        prediction = model.predict(features)
+    prediction = model.predict(features)
 
-        st.subheader("Result:")
+    st.subheader("Result:")
 
-        if prediction[0] == 0:
-            st.success("🎉 Your Loan will get Approved.")
-        else:
-            st.error("❌ Your Loan will NOT get Approved.")
+    if prediction[0] == 1:
+        st.success("🎉 Your Loan will get Approved.")
+    else:
+        st.error("❌ Your Loan will NOT get Approved.")
+   
 
 # ---------------- FOOTER ----------------
 st.markdown(
