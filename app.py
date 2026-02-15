@@ -105,4 +105,14 @@ The loan approval prediction model uses your credit score, income, education, lo
             else: 
                 st.write("Your Loan will not get Approved.")
 
+hide_menu_style = """
+        <style>
+        #MainMenu {visibility: hidden;}
+        </style>
+        """
+st.markdown(hide_menu_style, unsafe_allow_html=True)
 
+
+
+if __name__ == '__main__':
+	main()
