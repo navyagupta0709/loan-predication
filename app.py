@@ -82,5 +82,5 @@ st.markdown(
 )
 
 # ---------------- RUN APP ----------------
-if __name_ == "__main__":
+if __name__ == "__main__":
     main()
