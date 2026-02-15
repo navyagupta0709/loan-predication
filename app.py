@@ -137,7 +137,7 @@ text-decoration: underline;
 if __name__ == '__main__':
 	main()
 
-ooter = """
+footer = """
 <style>
 .footer {
     position: relative;
