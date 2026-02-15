@@ -132,18 +132,4 @@ background-color: transparent;
 text-decoration: underline;
 }
 
-.footer {
-position: relative;
-left: 0;
-bottom: 0;
-width: 100%;
-background-color: #Oe1117;
-color: white;
-text-align: center;
-}
-</style>
-<div class="footer">
-<p>Developed with ❤ by <a style='display: block; text-align: center;' href="https://ukantjadia.me/linkedin" target="_blank">Ukant Jadia & Aatmagyay Upadhyay</a></p>
-</div>
-"""
-st.markdown(footer,unsafe_allow_html=True)
+
