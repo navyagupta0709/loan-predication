@@ -1,0 +1,129 @@
+/* Custom styles for Loan Prediction App */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.stApp {
+    background-color: #f8f9fa;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.stTitle {
+    color: #2c3e50;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.stSidebar {
+    background-color: #ffffff;
+    border-right: 2px solid #e9ecef;
+    padding: 1rem;
+}
+
+.stSidebar .stHeader {
+    color: #495057;
+    font-size: 1.2em;
+    margin-bottom: 1rem;
+}
+
+.stButton > button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.stButton > button:hover {
+    background-color: #218838;
+}
+
+.stMetric {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.stMetric .metric-label {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+.stMetric .metric-value {
+    font-size: 2em;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.stProgress > div > div {
+    background-color: #28a745;
+}
+
+.stTabs [data-baseweb="tab-list"] {
+    background-color: #ffffff;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.stTabs [data-baseweb="tab"] {
+    color: #495057;
+    font-weight: 500;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    color: #28a745;
+    border-bottom: 3px solid #28a745;
+}
+
+.stError {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 0.75rem;
+}
+
+.stSuccess {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    padding: 0.75rem;
+}
+
+.stSubheader {
+    color: #495057;
+    font-weight: 600;
+    margin-top: 1.5rem;
+}
+
+.stMarkdown p {
+    line-height: 1.6;
+}
+
+footer {
+    visibility: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stApp {
+        padding: 1rem;
+    }
+    .stTitle {
+        font-size: 1.5em;
+    }
+    .stMetric {
+        margin-bottom: 1rem;
+    }
+}
