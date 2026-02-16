@@ -2,85 +2,77 @@ import streamlit as st
 import numpy as np
 import joblib
 
-# ---------------- LOAD MODEL ----------------
+# ---------------- Load Model ----------------
 def load_model():
-    model = joblib.load("model.sav")
-    return model
+    return joblib.load("model.sav")
 
-# ---------------- MAIN FUNCTION ----------------
+# ---------------- Main App ----------------
 def main():
 
-    st.title("🏦 Loan Approval Prediction System")
+    st.set_page_config(page_title="Loan Approval Prediction", layout="wide")
 
-    st.write("Fill the details below to check loan approval status.")
+    st.title("🏦 Loan Approval Prediction")
 
-    # ----------- INPUT FIELDS -----------
+    st.markdown("---")
 
-    gender = st.radio("Gender", ["Male", "Female"])
-    married = st.radio("Married", ["Yes", "No"])
-    education = st.radio("Education", ["Graduate", "Not Graduate"])
-    employed = st.radio("Self Employed", ["Yes", "No"])
-    property_area = st.radio("Property Area", ["Rural", "Semiurban", "Urban"])
+    with st.form("loan_form"):
 
-    applicant_income = st.number_input("Applicant Income", min_value=0.0)
-    coapplicant_income = st.number_input("Co-Applicant Income", min_value=0.0)
-    loan_amount = st.number_input("Loan Amount", min_value=0.0)
-    loan_term = st.number_input("Loan Amount Term", min_value=0.0)
-    credit_history = st.slider("Credit History", 0, 1)
-    dependents = st.slider("Dependents", 0, 3)
+        col1, col2 = st.columns(2)
 
-    # ----------- MANUAL ENCODING (SAFE) -----------
+        with col1:
+            gender = st.selectbox("Gender", ["Male", "Female"])
+            married = st.selectbox("Married", ["Yes", "No"])
+            education = st.selectbox("Education", ["Graduate", "Not Graduate"])
+            self_employed = st.selectbox("Self Employed", ["Yes", "No"])
+            credit_history = st.selectbox("Credit History", ["Yes", "No"])
 
-    gender = 1 if gender == "Male" else 0
-    married = 1 if married == "Yes" else 0
-    education = 1 if education == "Graduate" else 0
-    employed = 1 if employed == "Yes" else 0
+        with col2:
+            property_area = st.selectbox("Property Area", ["Rural", "Semiurban", "Urban"])
+            income = st.number_input("Applicant Income", min_value=0)
+            loan_amount = st.number_input("Loan Amount", min_value=0)
+            loan_term = st.number_input("Loan Amount Term", min_value=0)
+            dependents = st.number_input("Dependents", min_value=0)
 
-    property_dict = {"Rural": 0, "Semiurban": 1, "Urban": 2}
-    property_area = property_dict[property_area]
+        submit = st.form_submit_button("Predict")
 
-    # ----------- PREDICTION -----------
-if st.button("Submit"):
+    # ---------------- Prediction ----------------
+    if submit:
 
-    model = load_model()
+        gender_val = 1 if gender == "Male" else 0
+        married_val = 1 if married == "Yes" else 0
+        education_val = 1 if education == "Graduate" else 0
+        employed_val = 1 if self_employed == "Yes" else 0
+        credit_val = 1 if credit_history == "Yes" else 0
 
-    # Manual encoding
-    gender_val = 1 if gender == "Male" else 0
-    married_val = 1 if married == "Yes" else 0
-    education_val = 1 if education == "Graduate" else 0
-    employed_val = 1 if employed == "Yes" else 0
-    property_dict = {"Rural": 0, "Semiurban": 1, "Urban": 2}
-    property_val = property_dict[property_area]
+        property_val = 0 if property_area == "Rural" else 1 if property_area == "Semiurban" else 2
 
-    # IMPORTANT: Same order as training
-    features = np.array([[applicant_income,
-                          coapplicant_income,
-                          loan_amount,
-                          loan_term,
-                          gender_val,
-                          married_val,
-                          dependents,
-                          education_val,
-                          employed_val,
-                          credit_history,
-                          property_val]])
+        features = np.array([[income,
+                              loan_amount,
+                              loan_term,
+                              dependents,
+                              gender_val,
+                              married_val,
+                              education_val,
+                              employed_val,
+                              credit_val,
+                              property_val]])
 
-    prediction = model.predict(features)
+        model = load_model()
+        prediction = model.predict(features)
 
-    st.subheader("Result:")
+        st.subheader("Prediction Result")
 
-    if prediction[0] == 1:
-        st.success("🎉 Your Loan will get Approved.")
-    else:
-        st.error("❌ Your Loan will NOT get Approved.")
-   
+        if prediction[0] == 1:
+            st.success("💚 You Are Eligible for Loan")
+        else:
+            st.error("❌ You Are Not Eligible for Loan")
 
-# ---------------- FOOTER ----------------
-st.markdown(
-    "<div style='text-align:center; padding:20px;'>Developed with ❤️ by <b>Navya Gupta</b></div>",
-    unsafe_allow_html=True
-)
+    # ---------------- Footer ----------------
+    st.markdown(
+        "<div style='text-align:center; padding:20px;'>Developed with 💖 by <b>Navya Gupta</b></div>",
+        unsafe_allow_html=True
+    )
 
-# ---------------- RUN APP ----------------
+
 if __name__ == "__main__":
     main()
