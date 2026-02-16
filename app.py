@@ -3,6 +3,58 @@ import numpy as np
 import joblib
 with open("style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+# Page config
+st.set_page_config(page_title="Loan Prediction App", page_icon="💰", layout="wide")
+
+# Custom CSS
+st.markdown("""
+    <style>
+    /* Main background */
+    .stApp {
+        background: linear-gradient(135deg, #1f1c2c, #928dab);
+        color: white;
+    }
+
+    /* Title styling */
+    h1 {
+        color: #ffffff;
+        text-align: center;
+        font-size: 40px;
+    }
+
+    /* Labels */
+    label {
+        color: #f0f0f0 !important;
+        font-weight: 500;
+    }
+
+    /* Selectbox & Inputs */
+    .stSelectbox, .stNumberInput, .stTextInput {
+        background-color: #2c2c3e !important;
+        color: white !important;
+        border-radius: 10px !important;
+    }
+
+    /* Button */
+    div.stButton > button {
+        background-color: #ff4b4b;
+        color: white;
+        border-radius: 10px;
+        height: 3em;
+        width: 100%;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    div.stButton > button:hover {
+        background-color: #ff1e1e;
+        color: white;
+    }
+
+    </style>
+""", unsafe_allow_html=True)
+
 # ---------------- Load Model ----------------
 def load_model():
     return joblib.load("model.sav")
