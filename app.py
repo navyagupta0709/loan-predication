@@ -1,7 +1,8 @@
 import streamlit as st
 import numpy as np
 import joblib
-
+with open("style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 # ---------------- Load Model ----------------
 def load_model():
     return joblib.load("model.sav")
