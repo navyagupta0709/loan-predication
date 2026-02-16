@@ -1,71 +1,56 @@
 import streamlit as st
 import numpy as np
+import pandas as pd
 import joblib
-with open("style.css") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Page config
-st.set_page_config(page_title="Loan Prediction App", page_icon="💰", layout="wide")
+# ---------------- Page Config ----------------
+st.set_page_config(
+    page_title="Loan Approval Prediction",
+    page_icon="💰",
+    layout="wide"
+)
 
-# Custom CSS
+# ---------------- Custom CSS ----------------
 st.markdown("""
-    <style>
-    /* Main background */
-    .stApp {
-        background: linear-gradient(135deg, #1f1c2c, #928dab);
-        color: white;
-    }
+<style>
+.stApp {
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+    color: white;
+}
 
-    /* Title styling */
-    h1 {
-        color: #ffffff;
-        text-align: center;
-        font-size: 40px;
-    }
+h1 {
+    text-align: center;
+    font-size: 40px;
+}
 
-    /* Labels */
-    label {
-        color: #f0f0f0 !important;
-        font-weight: 500;
-    }
-
-    /* Selectbox & Inputs */
-    .stSelectbox, .stNumberInput, .stTextInput {
-        background-color: #2c2c3e !important;
-        color: white !important;
-        border-radius: 10px !important;
-    }
-
-    /* Button */
-    div.stButton > button {
-        background-color: #ff4b4b;
-        color: white;
-        border-radius: 10px;
-        height: 3em;
-        width: 100%;
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    div.stButton > button:hover {
-        background-color: #ff1e1e;
-        color: white;
-    }
-
-    </style>
+div.stButton > button {
+    background-color: #ff4b4b;
+    color: white;
+    border-radius: 10px;
+    height: 3em;
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+}
+div.stButton > button:hover {
+    background-color: #ff1e1e;
+}
+</style>
 """, unsafe_allow_html=True)
 
+
 # ---------------- Load Model ----------------
+@st.cache_resource
 def load_model():
-    return joblib.load("model.sav")
+    model = joblib.load("model.sav")
+    columns = joblib.load("columns.pkl")
+    return model, columns
+
 
 # ---------------- Main App ----------------
 def main():
 
-    st.set_page_config(page_title="Loan Approval Prediction", layout="wide")
-
     st.title("🏦 Loan Approval Prediction")
-
     st.markdown("---")
 
     with st.form("loan_form"):
@@ -91,26 +76,30 @@ def main():
     # ---------------- Prediction ----------------
     if submit:
 
+        model, cols = load_model()
+
         gender_val = 1 if gender == "Male" else 0
         married_val = 1 if married == "Yes" else 0
         education_val = 1 if education == "Graduate" else 0
         employed_val = 1 if self_employed == "Yes" else 0
         credit_val = 1 if credit_history == "Yes" else 0
-
         property_val = 0 if property_area == "Rural" else 1 if property_area == "Semiurban" else 2
 
-        features = np.array([[income,
-                              loan_amount,
-                              loan_term,
-                              dependents,
-                              gender_val,
-                              married_val,
-                              education_val,
-                              employed_val,
-                              credit_val,
-                              property_val]])
+        input_values = [[
+            income,
+            loan_amount,
+            loan_term,
+            dependents,
+            gender_val,
+            married_val,
+            education_val,
+            employed_val,
+            credit_val,
+            property_val
+        ]]
 
-        model = load_model()
+        features = pd.DataFrame(input_values, columns=cols)
+
         prediction = model.predict(features)
 
         st.subheader("Prediction Result")
@@ -127,5 +116,5 @@ def main():
     )
 
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
