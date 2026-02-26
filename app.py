@@ -1,5 +1,4 @@
 import streamlit as st
-import numpy as np
 import pandas as pd
 import joblib
 
@@ -17,12 +16,10 @@ st.markdown("""
     background: linear-gradient(135deg, #1f1c2c, #928dab);
     color: white;
 }
-
 h1 {
     text-align: center;
     font-size: 40px;
 }
-
 div.stButton > button {
     background-color: #ff4b4b;
     color: white;
@@ -38,7 +35,6 @@ div.stButton > button:hover {
 </style>
 """, unsafe_allow_html=True)
 
-
 # ---------------- Load Model ----------------
 @st.cache_resource
 def load_model():
@@ -46,12 +42,13 @@ def load_model():
     columns = joblib.load("columns.pkl")
     return model, columns
 
-
 # ---------------- Main App ----------------
 def main():
 
     st.title("🏦 Loan Approval Prediction")
     st.markdown("---")
+
+    model, cols = load_model()
 
     with st.form("loan_form"):
 
@@ -66,40 +63,38 @@ def main():
 
         with col2:
             property_area = st.selectbox("Property Area", ["Rural", "Semiurban", "Urban"])
-            income = st.number_input("Applicant Income", min_value=0)
-            loan_amount = st.number_input("Loan Amount", min_value=0)
-            loan_term = st.number_input("Loan Amount Term", min_value=0)
-            dependents = st.number_input("Dependents", min_value=0)
+            income = st.number_input("Applicant Income", min_value=0.0)
+            loan_amount = st.number_input("Loan Amount", min_value=0.0)
+            loan_term = st.number_input("Loan Amount Term", min_value=0.0)
+            dependents = st.number_input("Dependents", min_value=0.0)
 
         submit = st.form_submit_button("Predict")
 
-    # ---------------- Prediction ----------------
     if submit:
 
-        model, cols = load_model()
+        # -------- Encoding --------
+        input_data = {
+            "ApplicantIncome": income,
+            "LoanAmount": loan_amount,
+            "Loan_Amount_Term": loan_term,
+            "Dependents": dependents,
+            "Gender": 1 if gender == "Male" else 0,
+            "Married": 1 if married == "Yes" else 0,
+            "Education": 1 if education == "Graduate" else 0,
+            "Self_Employed": 1 if self_employed == "Yes" else 0,
+            "Credit_History": 1 if credit_history == "Yes" else 0,
+            "Property_Area": 0 if property_area == "Rural"
+                              else 1 if property_area == "Semiurban"
+                              else 2
+        }
 
-        gender_val = 1 if gender == "Male" else 0
-        married_val = 1 if married == "Yes" else 0
-        education_val = 1 if education == "Graduate" else 0
-        employed_val = 1 if self_employed == "Yes" else 0
-        credit_val = 1 if credit_history == "Yes" else 0
-        property_val = 0 if property_area == "Rural" else 1 if property_area == "Semiurban" else 2
+        # -------- Create DataFrame Safely --------
+        features = pd.DataFrame([input_data])
 
-        input_values = [[
-            income,
-            loan_amount,
-            loan_term,
-            dependents,
-            gender_val,
-            married_val,
-            education_val,
-            employed_val,
-            credit_val,
-            property_val
-        ]]
+        # Ensure same column order as training
+        features = features.reindex(columns=cols, fill_value=0)
 
-        features = pd.DataFrame(input_values, columns=cols)
-
+        # -------- Prediction --------
         prediction = model.predict(features)
 
         st.subheader("Prediction Result")
@@ -109,12 +104,10 @@ def main():
         else:
             st.error("❌ You Are Not Eligible for Loan")
 
-    # ---------------- Footer ----------------
     st.markdown(
         "<div style='text-align:center; padding:20px;'>Developed with 💖 by <b>Navya Gupta</b></div>",
         unsafe_allow_html=True
     )
-
 
 if __name__ == "__main__":
     main()
